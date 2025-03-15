@@ -1,75 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Account Dashboard</title>
-  <link rel="stylesheet" href="/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="/css/custom.css" />
-  <style>
-    .item-icon {
-      width: 40px;
-      height: 40px;
-      display: inline-block;
-      background-size: cover;
-      vertical-align: middle;
-    }
-    .item-epic {
-      color: #a335ee;
-    }
-    .item-rare {
-      color: #0070dd;
-    }
-    .item-common {
-      color: #ffffff;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <title>Account - WoW Server</title>
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/custom.css">
 </head>
-<body class="bg-dark text-light">
+<body>
   <%- include('partials/navbar') %>
-
-  <div class="container mt-5">
-    <h2 class="text-warning">Welcome, <%= user %></h2>
-
-    <% if (realms.length === 0) { %>
-      <p>No realms configured.</p>
-    <% } else { %>
-      <% realms.forEach(realm => { %>
-        <h3 class="mt-4"><%= realm.name %></h3>
-        <% if (realm.characters.length === 0) { %>
-          <p>No characters found in this realm. Log in to the game to create one!</p>
-        <% } else { %>
-          <ul class="list-group mb-4">
-            <% realm.characters.forEach(char => { %>
-              <li class="list-group-item bg-secondary text-light">
-                <strong><%= char.name %></strong> (Level <%= char.level %>) —
-                Race: <%= char.race %>, Class: <%= char.class %>
-                <div class="mt-2">
-                  <h5>Equipped Items:</h5>
-                  <% if (char.items.length === 0) { %>
-                    <p>No equipped items.</p>
-                  <% } else { %>
-                    <ul class="list-unstyled">
-                      <% char.items.forEach(item => { %>
-                        <li>
-                          <span class="item-icon" style="background-image: url('<%= item.icon %>');"></span>
-                          <span class="<%= item.quality === 'Epic' ? 'item-epic' : item.quality === 'Rare' ? 'item-rare' : 'item-common' %>">
-                            <%= item.name %>
-                          </span>
-                          <small>(ID: <%= item.id %>)</small>
-                        </li>
-                      <% }) %>
-                    </ul>
-                  <% } %>
-                </div>
-              </li>
-            <% }) %>
-          </ul>
-        <% } %>
-      <% }) %>
-    <% } %>
+  <div class="content-wrapper">
+    <div class="container mt-5">
+      <h2 class="text-warning">Welcome, <%= user %></h2>
+      <p>
+        Status: <%= isOnline ? 'Online' : 'Offline' %> | 
+        Account: <%= isActive ? 'Active' : 'Banned' %>
+        <% if (banStatus) { %> | Ban Reason: <%= banStatus %> <% } %>
+        <% if (muteTime) { %> | Muted Until: <%= muteTime %> (<%= muteReason %>) <% } %>
+      </p>
+      <% if (realms.length === 0) { %>
+        <p>No realms configured.</p>
+      <% } else { %>
+        <% realms.forEach(realm => { %>
+          <h3 class="mt-4"><%= realm.name %></h3>
+          <% if (realm.characters.length === 0) { %>
+            <p>No characters found in this realm. Log in to the game to create one!</p>
+          <% } else { %>
+            <ul class="list-group mb-4">
+              <% realm.characters.forEach(char => { %>
+                <li class="list-group-item">
+                  <strong><%= char.name %></strong> (Level <%= char.level %>) —
+                  Race: <%= char.race %>, Class: <%= char.class %>
+                  <%= char.online ? '<span class="badge bg-success">Online</span>' : '' %>
+                  <div class="mt-2">
+                    <p>Currency: <%= char.money.gold %>g <%= char.money.silver %>s <%= char.money.copper %>c</p>
+                    <h5>Equipped Items:</h5>
+                    <% if (char.items.length === 0) { %>
+                      <p>No equipped items.</p>
+                    <% } else { %>
+                      <ul class="list-unstyled">
+                        <% char.items.forEach(item => { %>
+                          <li>
+                            <span class="item-icon" style="background-image: url('/icons/<%= item.icon %>.jpg');"></span>
+                            <span class="<%= item.quality === 'Epic' ? 'item-epic' : item.quality === 'Rare' ? 'item-rare' : item.quality === 'Legendary' ? 'item-legendary' : 'item-common' %>">
+                              <%= item.name %>
+                            </span>
+                            <small>(ID: <%= item.id %>)</small>
+                          </li>
+                        <% }) %>
+                      </ul>
+                    <% } %>
+                    <h5>Inventory (Bags):</h5>
+                    <% if (char.inventory.length === 0) { %>
+                      <p>No items in inventory.</p>
+                    <% } else { %>
+                      <ul class="list-unstyled">
+                        <% char.inventory.forEach(item => { %>
+                          <li>
+                            <span class="item-icon" style="background-image: url('/icons/<%= item.icon %>.jpg');"></span>
+                            <span class="<%= item.quality === 'Epic' ? 'item-epic' : item.quality === 'Rare' ? 'item-rare' : item.quality === 'Legendary' ? 'item-legendary' : 'item-common' %>">
+                              <%= item.name %>
+                            </span>
+                            <small>(ID: <%= item.id %>)</small>
+                          </li>
+                        <% }) %>
+                      </ul>
+                    <% } %>
+                  </div>
+                </li>
+              <% }) %>
+            </ul>
+          <% } %>
+        <% }) %>
+      <% } %>
+      <% if (showModal) { %>
+        <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-success text-light">
+              <div class="modal-body text-center">Account created successfully!</div>
+            </div>
+          </div>
+        </div>
+        <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            const modal = new bootstrap.Modal(document.getElementById('successModal'), { backdrop: 'static', keyboard: false });
+            modal.show();
+            setTimeout(() => modal.hide(), 5000);
+          });
+        </script>
+      <% } %>
+      <% if (errorMessage) { %>
+        <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-danger text-light">
+              <div class="modal-header">
+                <h5 class="modal-title" id="errorModalLabel">Error</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p><%= errorMessage %></p>
+                <button class="btn btn-secondary" onclick="navigator.clipboard.writeText('<%= errorMessage %>')">Copy Error</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            const modal = new bootstrap.Modal(document.getElementById('errorModal'), { backdrop: 'static', keyboard: false });
+            modal.show();
+          });
+        </script>
+      <% } %>
+    </div>
   </div>
-
   <script src="/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

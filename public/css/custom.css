@@ -1,20 +1,135 @@
-/* public/css/custom.css */
+/* Background and global styles */
 body {
-    background-image: url('/images/wow-background.jpg'); /* Optional: Add a WoW-themed background */
-    background-size: cover;
-    background-attachment: fixed;
-  }
-  .navbar {
-    background-color: #1a1a1a !important;
-  }
-  .list-group-item {
-    border: none;
-  }
-  .btn-primary {
-    background-color: #ff9900;
-    border-color: #ff9900;
-  }
-  .btn-primary:hover {
-    background-color: #e68a00;
-    border-color: #e68a00;
-  }
+  background-image: url('../images/wow-background.jpeg'); /* Correct path from public/ */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+  font-family: 'LiteCraft', sans-serif;
+  color: #E8ECEF; /* Default text color: soft white */
+}
+
+/* Font styles */
+@font-face {
+  font-family: 'LiteCraft';
+  src: url('/fonts/LiteCraft.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Ensure LiteCraft font applies to all text elements */
+h1, h2, h3, h4, h5, h6, p, a, .nav-link, .btn, .card-header, .alert, .list-group-item {
+  font-family: 'LiteCraft', sans-serif;
+}
+
+/* Custom text colors */
+.big-text {
+  font-size: 2.5em;
+  color: #D4A017;
+}
+.medium-text {
+  font-size: 1.2em;
+  color: #E8ECEF;
+}
+.small-text {
+  font-size: 0.9em;
+  color: #E8ECEF;
+}
+
+/* Status circles */
+.status-circle {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: 5px;
+}
+.green-circle { background-color: #28a745; }
+.gray-circle { background-color: #6c757d; }
+.red-circle { background-color: #dc3545; }
+
+/* Bootstrap overrides and custom styles */
+.jumbotron, .card, .list-group-item {
+  background: rgba(28, 37, 38, 0.8);
+  border: 1px solid #3A5FCD;
+  color: #E8ECEF;
+}
+.card {
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+.btn-primary {
+  background-color: #3A5FCD;
+  border-color: #3A5FCD;
+}
+.btn-primary:hover {
+  background-color: #2A4B9E;
+  border-color: #2A4B9E;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+.btn-secondary:hover {
+  background-color: #5a6268;
+  border-color: #5a6268;
+}
+
+/* Navbar styles */
+.navbar {
+  background: rgba(28, 37, 38, 0.9);
+}
+.navbar-brand, .nav-link {
+  color: #D4A017 !important;
+}
+.nav-link:hover, .nav-link.active {
+  color: #E8B923 !important;
+}
+.navbar-toggler-icon {
+  filter: invert(1);
+}
+
+/* Account page specific styles */
+.item-icon {
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+  background-size: cover;
+  vertical-align: middle;
+}
+.item-epic { color: #a335ee; }
+.item-rare { color: #0070dd; }
+.item-legendary { color: #ff8000; }
+.item-common { color: #ffffff; }
+.btn-close {
+  filter: invert(1);
+}
+
+/* Setup page specific styles */
+pre {
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  border-radius: 5px;
+  display: inline-block;
+  color: #E8ECEF;
+}
+
+/* Ensure links are styled */
+a {
+  color: #D4A017;
+}
+a:hover {
+  color: #E8B923;
+}
+
+/* Content wrapper for opaque background */
+.content-wrapper {
+  background: rgba(28, 37, 38, 0.8); /* Same deep teal overlay as cards */
+  border: 1px solid #3A5FCD; /* Muted blue border for consistency */
+  padding: 20px;
+  border-radius: 8px;
+  margin: 20px auto; /* Center with margin */
+  max-width: 90%; /* Prevent it from stretching too wide on large screens */
+}

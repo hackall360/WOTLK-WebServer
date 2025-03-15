@@ -1,26 +1,19 @@
 {
-  "name": "trinity-web",
+  "name": "my-wow-server",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "WoW Server Web Interface",
+  "main": "server.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
-    "axios": "^1.8.3",
-    "bignum": "^0.13.1",
+    "bigint-mod-arith": "^3.3.1",
     "bootstrap": "^5.3.3",
-    "buffer": "^6.0.3",
-    "cheerio": "^1.0.0",
-    "crypto": "^1.0.1",
-    "dotenv": "^16.4.7",
-    "ejs": "^3.1.10",
-    "express": "^4.21.2",
-    "express-session": "^1.18.1",
-    "mysql2": "^3.13.0",
-    "node-srp": "^0.0.1"
+    "connect-mongo": "^5.1.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "express-mysql-session": "^3.0.3",
+    "express-session": "^1.17.1",
+    "mysql2": "^2.2.5"
   }
 }

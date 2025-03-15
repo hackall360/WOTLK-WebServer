@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Client Setup - WoW Server</title>
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/custom.css">
+  <style>
+    .container {
+      max-width: 800px;
+    }
+  </style>
+</head>
+<body>
+  <%- include('partials/navbar') %>
+  <div class="content-wrapper">
+    <div class="container mt-5">
+      <h2 class="text-warning">Client Setup Guide</h2>
+      <div class="card p-4">
+        <h4>Step 1: Install qBittorrent</h4>
+        <p>
+          Download and install qBittorrent for Windows x64 from:
+          <a href="https://www.fosshub.com/qBittorrent.html" target="_blank">https://www.fosshub.com/qBittorrent.html</a>.
+          Select the latest version for x64 Windows and follow the installation instructions.
+        </p>
+        <h4>Step 2: Download the Game Torrent</h4>
+        <p>
+          Download the <strong>WoW-Mania-EN-2.10.1.torrent</strong> file from the link below:
+          <a href="/torrents/WoW-Mania-EN-2.10.1.torrent" download>WoW-Mania-EN-2.10.1.torrent</a>.
+          Once qBittorrent is installed, open the torrent file to start downloading the game files.
+          Choose a destination folder where you would like the game to be installed.
+        </p>
+        <h4>Step 3: Update the Realm List</h4>
+        <p>
+          Manually update the realm list in your World of Warcraft client:
+          <ol>
+            <li>Locate the <code>Data/enUS/realmlist.wtf</code> file in your game directory.</li>
+            <li>Open it with a text editor (e.g., Notepad).</li>
+            <li>Replace the contents with:
+              <pre>set realmlist 127.0.0.1</pre>
+            </li>
+            <li>Save the file and close the editor.</li>
+          </ol>
+          <strong>Note:</strong> The realm list IP (127.0.0.1) is for local testing. The server owner will update this to the public IP once fully sorted.
+        </p>
+        <p class="mt-3">
+          Once these steps are complete, launch the game and log in with your registered account credentials!
+        </p>
+      </div>
+    </div>
+  </div>
+  <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

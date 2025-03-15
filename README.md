@@ -1,2 +1,0 @@
-# WOTLK-WebServer
-REPLACE ME

@@ -1,12 +1,22 @@
-// db.js
 const mysql = require('mysql2/promise');
-require('dotenv').config();
+const config = require('./config');
 
-const pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  multipleStatements: true
-});
+const pools = {
+  auth: mysql.createPool({
+    host: config.db.host,
+    user: config.db.user,
+    password: config.db.password,
+    database: config.db.auth_db
+  })
+};
 
-module.exports = pool;
+for (const realm of config.db.realms) {
+  pools[realm.db_name] = mysql.createPool({
+    host: realm.host,
+    user: realm.user,
+    password: realm.pass,
+    database: realm.db_name
+  });
+}
+
+module.exports = pools;

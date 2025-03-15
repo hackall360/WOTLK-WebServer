@@ -1,24 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TrinityCore Web</title>
-  <link rel="stylesheet" href="/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="/css/custom.css" />
+  <meta charset="UTF-8">
+  <title>WoW Server</title>
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/custom.css">
+  <style>
+    .centered {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 70vh;
+      text-align: center;
+    }
+  </style>
 </head>
-<body class="bg-dark text-light">
+<body>
   <%- include('partials/navbar') %>
-
-  <div class="container mt-5 text-center">
-    <h1 class="text-warning">Welcome to TrinityCore Web</h1>
-    <p class="lead text-muted">A modern web interface for managing your TrinityCore account.</p>
+  <div class="content-wrapper">
+    <div class="centered">
+      <% if (user) { %>
+        <p class="medium-text">Users Online: <%= usersOnline %> <span class="status-circle <%= usersOnline > 0 ? 'green-circle' : 'gray-circle' %>"></span></p>
+        <p class="medium-text">
+          <%= realmsStatus[0].name %>: <%= realmsStatus[0].isLive ? 'Live' : 'Offline' %>
+          <span class="status-circle <%= realmsStatus[0].isLive ? 'green-circle' : 'red-circle' %>"></span>
+        </p>
+        <h1 class="big-text">Welcome <%= user %>!</h1>
+        <p class="medium-text">To be able to play in-game follow the setup guide here:</p>
+        <a href="/setup" class="btn btn-primary mb-4">Client Setup</a>
+      <% } else { %>
+        <div class="jumbotron p-5 rounded">
+          <h1 class="display-4">Welcome to WoW Server</h1>
+          <p class="lead">Join our community and explore epic adventures!</p>
+          <a class="btn btn-primary btn-lg" href="/register" role="button">Get Started</a>
+        </div>
+      <% } %>
+    </div>
   </div>
-
   <script src="/js/bootstrap.bundle.min.js"></script>
-  <script src="/js/buffer.min.js"></script>
-  <script src="/js/srp6a-bundle.js"></script>
-  <script src="/js/login.js"></script>
-
 </body>
 </html>
