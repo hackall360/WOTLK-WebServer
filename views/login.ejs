@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login</title>
+  <link rel="stylesheet" href="/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="/css/custom.css" />
+</head>
+<body class="bg-dark text-light">
+  <%- include('partials/navbar') %>
+
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <h2 class="text-warning mb-4">Login</h2>
+        <form id="loginForm">
+          <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input id="username" type="text" class="form-control" required />
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input id="password" type="password" class="form-control" required />
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Login</button>
+        </form>
+        <div id="loginStatus" class="mt-3"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load local Buffer polyfill so Buffer is defined -->
+  <script src="/js/buffer.min.js"></script>
+  <!-- Load the bundled SRP6a client code -->
+  <script src="/js/srp6a-bundle.js"></script>
+  <!-- Fully implemented SRP6a login client code -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const form = document.getElementById('loginForm');
+      const statusDiv = document.getElementById('loginStatus');
+
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        statusDiv.innerText = "Starting login process...";
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value.trim();
+        if (!username || !password) {
+          alert("Please provide both username and password.");
+          return;
+        }
+        try {
+          // Stage 1: Initiate SRP login by sending username to /login/init
+          const initResponse = await fetch('/login/init', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username })
+          });
+          const initData = await initResponse.json();
+          if (!initData.success) {
+            statusDiv.innerText = "Login initialization failed: " + initData.error;
+            return;
+          }
+          statusDiv.innerText = "Received salt and server public key.";
+
+          // Convert salt and server public key from hex to Buffer using the polyfill
+          const saltBuf = Buffer.from(initData.salt, 'hex');
+          const BBuf = Buffer.from(initData.B, 'hex');
+
+          // Create a new SRPClient instance (exposed by your bundled SRP6a code)
+          const client = new SRPClient();
+          client.setCredentials(username, password, saltBuf);
+          client.setServerKey(BBuf);
+
+          // Retrieve the computed ephemeral public key (A) and client proof (M1)
+          const ABuf = client.getPublicKey();
+          const M1Buf = client.getProof();
+
+          // Convert these to hex strings
+          const AHex = ABuf.toString('hex');
+          const M1Hex = M1Buf.toString('hex');
+
+          statusDiv.innerText = "Computed client ephemeral values. Sending proof to server...";
+
+          // Stage 2: Send A and M1 to /login/proof
+          const proofResponse = await fetch('/login/proof', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, A: AHex, M1: M1Hex })
+          });
+          const proofData = await proofResponse.json();
+          if (!proofData.success) {
+            statusDiv.innerText = "Login proof failed: " + proofData.error;
+            return;
+          }
+
+          // Validate the server's proof (M2)
+          const M2Buf = Buffer.from(proofData.M2, 'hex');
+          if (!client.validateProof(M2Buf)) {
+            statusDiv.innerText = "Server proof validation failed.";
+            return;
+          }
+
+          statusDiv.innerText = "Login successful! Redirecting...";
+          window.location.href = '/account';
+        } catch (err) {
+          console.error("Login error:", err);
+          statusDiv.innerText = "Login error: " + err.message;
+        }
+      });
+    });
+  </script>
+
+  <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

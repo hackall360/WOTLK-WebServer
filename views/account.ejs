@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Account Dashboard</title>
+  <link rel="stylesheet" href="/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="/css/custom.css" />
+  <style>
+    .item-icon {
+      width: 40px;
+      height: 40px;
+      display: inline-block;
+      background-size: cover;
+      vertical-align: middle;
+    }
+    .item-epic {
+      color: #a335ee;
+    }
+    .item-rare {
+      color: #0070dd;
+    }
+    .item-common {
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body class="bg-dark text-light">
+  <%- include('partials/navbar') %>
+
+  <div class="container mt-5">
+    <h2 class="text-warning">Welcome, <%= user %></h2>
+
+    <% if (realms.length === 0) { %>
+      <p>No realms configured.</p>
+    <% } else { %>
+      <% realms.forEach(realm => { %>
+        <h3 class="mt-4"><%= realm.name %></h3>
+        <% if (realm.characters.length === 0) { %>
+          <p>No characters found in this realm. Log in to the game to create one!</p>
+        <% } else { %>
+          <ul class="list-group mb-4">
+            <% realm.characters.forEach(char => { %>
+              <li class="list-group-item bg-secondary text-light">
+                <strong><%= char.name %></strong> (Level <%= char.level %>) —
+                Race: <%= char.race %>, Class: <%= char.class %>
+                <div class="mt-2">
+                  <h5>Equipped Items:</h5>
+                  <% if (char.items.length === 0) { %>
+                    <p>No equipped items.</p>
+                  <% } else { %>
+                    <ul class="list-unstyled">
+                      <% char.items.forEach(item => { %>
+                        <li>
+                          <span class="item-icon" style="background-image: url('<%= item.icon %>');"></span>
+                          <span class="<%= item.quality === 'Epic' ? 'item-epic' : item.quality === 'Rare' ? 'item-rare' : 'item-common' %>">
+                            <%= item.name %>
+                          </span>
+                          <small>(ID: <%= item.id %>)</small>
+                        </li>
+                      <% }) %>
+                    </ul>
+                  <% } %>
+                </div>
+              </li>
+            <% }) %>
+          </ul>
+        <% } %>
+      <% }) %>
+    <% } %>
+  </div>
+
+  <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

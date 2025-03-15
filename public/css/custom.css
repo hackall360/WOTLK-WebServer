@@ -1,0 +1,20 @@
+/* public/css/custom.css */
+body {
+    background-image: url('/images/wow-background.jpg'); /* Optional: Add a WoW-themed background */
+    background-size: cover;
+    background-attachment: fixed;
+  }
+  .navbar {
+    background-color: #1a1a1a !important;
+  }
+  .list-group-item {
+    border: none;
+  }
+  .btn-primary {
+    background-color: #ff9900;
+    border-color: #ff9900;
+  }
+  .btn-primary:hover {
+    background-color: #e68a00;
+    border-color: #e68a00;
+  }

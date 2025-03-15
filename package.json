@@ -1,0 +1,26 @@
+{
+  "name": "trinity-web",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "axios": "^1.8.3",
+    "bignum": "^0.13.1",
+    "bootstrap": "^5.3.3",
+    "buffer": "^6.0.3",
+    "cheerio": "^1.0.0",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "mysql2": "^3.13.0",
+    "node-srp": "^0.0.1"
+  }
+}
